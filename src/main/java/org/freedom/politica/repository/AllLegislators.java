@@ -8,6 +8,7 @@ import org.freedom.politica.model.Legislators;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.InputStream;
 
 @Service
 public class AllLegislators {
@@ -16,11 +17,10 @@ public class AllLegislators {
 
     public AllLegislators() {
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource("legislators.json").getFile());
+            InputStream data = getClass().getResourceAsStream("/legislators.json");
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            legislators = objectMapper.readValue(file, Legislators.class);
+            legislators = objectMapper.readValue(data, Legislators.class);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

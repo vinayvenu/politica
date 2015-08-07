@@ -25,7 +25,7 @@ public class AllConstituencies {
 
         try {
             Map connect = new HashMap();
-            connect.put("url", file.toURL());
+            connect.put("url", file.toURI().toURL());
 
             DataStore dataStore = DataStoreFinder.getDataStore(connect);
             String[] typeNames = dataStore.getTypeNames();
