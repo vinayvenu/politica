@@ -7,7 +7,6 @@ import org.freedom.politica.model.Legislator;
 import org.freedom.politica.model.Legislators;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.InputStream;
 
 @Service

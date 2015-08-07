@@ -8,36 +8,46 @@ import org.geotools.feature.simple.SimpleFeatureImpl;
 import org.geotools.filter.text.cql2.CQL;
 import org.opengis.feature.Feature;
 import org.opengis.filter.Filter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class AllConstituencies {
 
-    private final FeatureSource featureSource;
+    private FeatureSource featureSource;
+
+    @Value(value = "${shapefile}")
+    private String shapefile;
 
     public AllConstituencies() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("india_pc_2014.shp").getFile());
-
-        try {
-            Map connect = new HashMap();
-            connect.put("url", file.toURI().toURL());
-
-            DataStore dataStore = DataStoreFinder.getDataStore(connect);
-            String[] typeNames = dataStore.getTypeNames();
-            String typeName = typeNames[0];
-
-            featureSource = dataStore.getFeatureSource(typeName);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
+
     public Feature featureForLocation(double x, double y) {
+
+        if (featureSource == null) {
+            File file = new File(shapefile);
+            try {
+                Map connect = new HashMap();
+                connect.put("url", file.toURI().toURL());
+
+                DataStore dataStore = DataStoreFinder.getDataStore(connect);
+                String[] typeNames = dataStore.getTypeNames();
+                String typeName = typeNames[0];
+
+                featureSource = dataStore.getFeatureSource(typeName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
         try {
             Filter filter = CQL.toFilter("CONTAINS(the_geom, POINT(" + x + " " + y + "))");
 
