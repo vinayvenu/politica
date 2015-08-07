@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Version: 1.0-SNAPSHOT
-Implementation-Vendor-Id: org.freedom
-Build-Jdk: 1.8.0_25
-Built-By: vinayv
-Created-By: IntelliJ IDEA
-Main-Class: ${start-class}
-
