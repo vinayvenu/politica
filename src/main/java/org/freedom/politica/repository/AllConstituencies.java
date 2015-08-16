@@ -11,9 +11,6 @@ import org.opengis.filter.Filter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +29,9 @@ public class AllConstituencies {
     public Feature featureForLocation(double x, double y) {
 
         if (featureSource == null) {
-            File file = new File(shapefile);
             try {
                 Map connect = new HashMap();
-                connect.put("url", file.toURI().toURL());
+                connect.put("url", this.getClass().getResource(shapefile));
 
                 DataStore dataStore = DataStoreFinder.getDataStore(connect);
                 String[] typeNames = dataStore.getTypeNames();
@@ -53,7 +49,7 @@ public class AllConstituencies {
 
             FeatureIterator featureIterator = featureSource.getFeatures(filter).features();
 
-            return featureIterator.hasNext()? featureIterator.next(): null;
+            return featureIterator.hasNext() ? featureIterator.next() : null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -61,6 +57,6 @@ public class AllConstituencies {
 
     public String constituencyForLocation(double x, double y) {
         Feature feature = featureForLocation(x, y);
-        return feature != null? (String) ((SimpleFeatureImpl) feature).getAttribute("PC_NAME"): null;
+        return feature != null ? (String) ((SimpleFeatureImpl) feature).getAttribute("PC_NAME") : null;
     }
 }
